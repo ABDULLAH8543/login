@@ -9,20 +9,7 @@
     "userInterfaceStyle": "automatic",
 
     "android": {
-      "package": "com.abdullahdfs.myapp",
-      "googleServicesFile": "./google-services.json",
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "data": [
-            {
-              "scheme": "googleloginapp",
-              "host": "auth"
-            }
-          ],
-          "category": ["BROWSABLE", "DEFAULT"]
-        }
-      ]
+      "package": "com.abdullahdfs.myapp"
     },
 
     "extra": {
@@ -40,7 +27,9 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
-          "dark": { "backgroundColor": "#000000" }
+          "dark": {
+            "backgroundColor": "#000000"
+          }
         }
       ],
       "expo-web-browser"

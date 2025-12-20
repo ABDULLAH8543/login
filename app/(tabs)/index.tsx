@@ -10,21 +10,33 @@ WebBrowser.maybeCompleteAuthSession();
 export default function App() {
   const [user, setUser] = useState(null);
 
+  // Redirect URI needed for Expo Auth Session
+  const redirectUri = Google.makeRedirectUri({
+    scheme: "googleloginapp", // must match app.json scheme
+    native: "googleloginapp:/oauthredirect",
+  });
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
       "238599351095-9cv03v0dnoq6bnif75ga2gohsc9ok7pu.apps.googleusercontent.com",
-    expoClientId:
+    webClientId:
       "238599351095-q9avo14f0cqsjh7oevonq8ee0t7m2f3f.apps.googleusercontent.com",
+    redirectUri,
   });
 
   useEffect(() => {
     if (response?.type === "success") {
       const { id_token } = response.params;
+
       const credential = GoogleAuthProvider.credential(id_token);
 
-      signInWithCredential(auth, credential).then((userCredential) => {
-        setUser(userCredential.user);
-      });
+      signInWithCredential(auth, credential)
+        .then((res) => {
+          setUser(res.user);
+          // Optional: Save user to Firestore
+          // saveUser(res.user);
+        })
+        .catch((err) => console.log("Firebase error:", err));
     }
   }, [response]);
 
@@ -32,20 +44,12 @@ export default function App() {
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       {user ? (
         <>
-          <Text style={{ fontSize: 20 }}>Welcome</Text>
-          <Text style={{ fontSize: 16, color: "white" }}>
-            Name: {user.displayName}
-          </Text>
-          <Text style={{ fontSize: 16, color: "white" }}>
-            Email: {user.email}
-          </Text>
+          <Text>Welcome</Text>
+          <Text>Name: {user.displayName}</Text>
+          <Text>Email: {user.email}</Text>
         </>
       ) : (
-        <Button
-          disabled={!request}
-          title="Login With Google"
-          onPress={() => promptAsync()}
-        />
+        <Button title="Login With Google" onPress={() => promptAsync()} />
       )}
     </View>
   );
