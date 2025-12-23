@@ -45,7 +45,7 @@ export default function App() {
       {user ? (
         <>
           <Text>Welcome</Text>
-          <Text>Name: {user.displayName}</Text>
+          <Text>userName: {user.displayName}</Text>
           <Text>Email: {user.email}</Text>
         </>
       ) : (
